@@ -22,7 +22,7 @@ function CommentWithImageModal() {
     setComment('');
     setImage(null);
   };
-
+ 
   return ( 
     <div className='p-[4px] rounded-2xl bg-web-color w-full '>
      <div className='flex items-center w-[722px] h-[75px]'>
