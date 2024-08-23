@@ -14,6 +14,7 @@ function CommentWithImageModal() {
       setIsModalOpen(true); // Abre el modal si hay una imagen seleccionada
     }
   };
+ 
 
   const handlePost = () => {
     // Aquí va la lógica para publicar
