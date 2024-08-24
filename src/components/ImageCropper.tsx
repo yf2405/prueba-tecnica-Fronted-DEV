@@ -1,11 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import  { useState, useRef, useEffect } from 'react';
 import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
+import { useCommentContext } from '../useContext/context';
 
-const ImageCropper = ({ src, onCancel, onSave }) => {
+
+const ImageCropper = ({ src }: { src: string }) => {
+  const { setCroppedImage ,   setIsModalOpen,   setIsEditing, } = useCommentContext(); 
   const [crop, setCrop] = useState<Crop>({ aspect: 16 / 9 });
   const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
-  const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -13,7 +15,7 @@ const ImageCropper = ({ src, onCancel, onSave }) => {
     if (completedCrop && imageRef.current && canvasRef.current) {
       const canvas = canvasRef.current;
       const image = imageRef.current;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
 
       if (!ctx) return;
 
@@ -35,39 +37,42 @@ const ImageCropper = ({ src, onCancel, onSave }) => {
         completedCrop.height
       );
 
-      const url = canvas.toDataURL('image/jpeg');
-      setCroppedImageUrl(url); 
+      const url = canvas.toDataURL("image/jpeg");
+      setCroppedImage(url); // Guardar la imagen recortada en el contexto
     }
-  }, [completedCrop]);
+  }, [completedCrop, setCroppedImage]);
 
   const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
-    }
+        setIsEditing(false);
+        setIsModalOpen(true);
+        setCroppedImage(null);
   };
 
-  const handleSave = () => {
-    if (onSave && croppedImageUrl) {
-      onSave(croppedImageUrl);
-    }
+ const handleSave = () => {
+  setIsEditing(false)
+  setIsModalOpen(true);
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center overflow-auto">
-    <div className="flex flex-col items-center gap-3 p-3 mx-auto my-10 rounded-2xl bg-web-color w-full max-w-[420px]">
+    <div className="flex flex-col items-center gap-3 p-3 mx-auto my-10 rounded-2xl bg-web-color  w-[520px]">
+
+    <div className='flex justify-between w-full pl-3'>
+      <h3 className=' font-semibold'>Edit Photo</h3>
+    </div>
       {/* Área de recorte de imagen */}
-      <div className="border m-2 rounded-lg p-3 bg-white w-full">
+      <div className=" rounded-lg  w-full">
         <ReactCrop
           crop={crop}
           onChange={(newCrop) => setCrop(newCrop)}
           onComplete={(c) => setCompletedCrop(c)}
-          style={{ maxWidth: '100%',  margin:'10px', border: 'lightgray' }}
+          style={{ maxWidth: '98%',  margin:'0px', padding:'1px', border: 'lightgray' }}
         >
           <img
             ref={imageRef}
             src={src}
             alt="Imagen para recortar"
-            style={{ maxWidth: '100%' }}
+            style={{ maxWidth: '100%' , padding:'0px'}}
           />
         </ReactCrop>
 
@@ -86,9 +91,15 @@ const ImageCropper = ({ src, onCancel, onSave }) => {
      
 
       {/* Botón Guardar */}
-      <div className="flex justify-center w-full">
+      <div className="flex justify-end gap-2 w-full">
+      <button
+          onClick={handleCancel}
+          className="px-6 text-white hover:bg-hover-color  bg-transparent focus:outline-none border-none rounded-full font-bold text-base py-1.5 text-center inline-flex gap-8 items-center"
+        >
+          Cancelar
+        </button>
         <button
-          onClick={handleSave}
+         onClick={handleSave}
           className="px-6 text-black hover:bg-hover-button-post bg-button-post-color focus:outline-none border-none rounded-full font-bold text-base py-1.5 text-center inline-flex gap-8 items-center"
         >
           Guardar

@@ -1,10 +1,10 @@
-import viteLogo from "/vite.svg";
+import camilo from "../assets/Camilo.jpeg";
 function ComponentInput({OpenModal}) {
   return (
     <div className="flex items-center w-[714px] h-[75px]"> 
     {/* Input para el avatar */}
-    <div className="border p-4 m-4 rounded-full">
-      <img className="w-4 h-4" src={viteLogo} alt="Vite logo" />
+    <div className=" m-4 rounded-full">
+      <img className="w-10 h-10 rounded-full" src={camilo} alt="Vite logo" />
     </div>
     {/* Input para el comentario */}
     <input
