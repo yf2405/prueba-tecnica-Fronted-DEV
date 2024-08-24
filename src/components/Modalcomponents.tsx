@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import viteLogo from "/vite.svg";
 import { PiImageFill, PiPlayCircleFill } from "react-icons/pi";
 import { AiFillAudio } from "react-icons/ai";
+import   ImageCropper  from './ImageCropper.js';
+import ComponentInput from "./InputComponent.js";
+
 
 function CommentWithMediaModal() {
   const [comment, setComment] = useState("");
@@ -9,6 +12,7 @@ function CommentWithMediaModal() {
   const [video, setVideo] = useState<string | null>(null);
   const [audio, setAudio] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [privacy, setPrivacy] = useState("public"); // Estado para controlar la selección de privacidad
   const [dropdownOpen, setDropdownOpen] = useState(false); // Estado para controlar la visibilidad del dropdown
 
@@ -28,7 +32,13 @@ function CommentWithMediaModal() {
       } else if (type === "audio") {
         setAudio(fileURL);
       }
+      setIsEditing(false);
     }
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setIsModalOpen(false)
   };
 
   const handleOpenModal = () => {
@@ -66,22 +76,15 @@ function CommentWithMediaModal() {
   }, []);
   return (
     <div className="p-[4px] rounded-2xl bg-web-color w-full">
-      <div className="flex items-center w-[714px] h-[75px]"> 
-        {/* Input para el avatar */}
-        <div className="border p-4 m-4 rounded-full">
-          <img className="w-4 h-4" src={viteLogo} alt="Vite logo" />
-        </div>
-        {/* Input para el comentario */}
-        <input
-          className="flex h-[50px] w-[626px] rounded-full px-3 py-2 text-lg file:border-0 file:bg-transparent file:text-6xl file:font-medium placeholder:text-stone-400 focus-visible:outline-none hover:bg-stone-700 bg-input-color"
-          onClick={handleOpenModal}
-          placeholder="Escribe tu comentario aquí..."
-        />
-      </div>
-  
+       <ComponentInput OpenModal={handleOpenModal}/>
+      
+      {isEditing && Image && (
+         <ImageCropper  src = {image}/>
+       )} 
+       
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50  z-50">
-      <div className="flex flex-col items-center gap-3 p-3  mx-auto my-10 rounded-2xl bg-web-color w-full max-w-[720px]">
+      <div className="flex flex-col items-center gap-3 p-3  mx-auto my-10 rounded-2xl bg-web-color w-full  max-w-[720px]">
   <div className="flex justify-between items-center w-full">
     <h3 className="text-lg font-bold">Create post</h3>
     <button
@@ -92,9 +95,8 @@ function CommentWithMediaModal() {
     </button>
   </div>
 </div>
-        <div className=" flex items-center justify-center">
 
-       
+        <div className=" flex items-center justify-center">
           <section className="align-items-start gap-3 p-3 flex items-start rounded-2xl bg-web-color w-full max-w-[720px] mx-4">
                  
             {/* Input para el avatar */}
@@ -109,9 +111,13 @@ function CommentWithMediaModal() {
                     <button type='button' className="btn btn-gray rounded-pill">
                       +
                     </button>
-                    <button type='button' className="btn btn-gray rounded-pill">
-                      Edit
-                    </button>
+                    <button
+                type="button"
+                className="btn btn-gray rounded-pill"
+                onClick={handleEditClick}
+              >
+                Edit
+              </button>
                   </div>
                   <div className="rounded-3 overflow-hidden">
                     <div className="relative w-full h-full">
