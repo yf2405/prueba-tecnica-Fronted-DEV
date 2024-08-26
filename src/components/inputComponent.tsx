@@ -1,5 +1,5 @@
 import camilo from "../assets/Camilo.jpeg";
-function ComponentInput({OpenModal}) {
+function ComponentInput({OpenModal} : {OpenModal :any} ) {
   return (
     <div className="flex items-center w-[714px] h-[75px]"> 
     {/* Input para el avatar */}

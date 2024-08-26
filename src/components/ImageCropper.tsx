@@ -4,9 +4,9 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { useCommentContext } from '../useContext/context';
 
 
-const ImageCropper = ({ src }: { src: string }) => {
+const ImageCropper = ({ src }: { src: string | undefined }) => {
   const { setCroppedImage ,   setIsModalOpen,   setIsEditing, } = useCommentContext(); 
-  const [crop, setCrop] = useState<Crop>({ aspect: 16 / 9 });
+  const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,7 +45,7 @@ const ImageCropper = ({ src }: { src: string }) => {
   const handleCancel = () => {
         setIsEditing(false);
         setIsModalOpen(true);
-        setCroppedImage(null);
+        setCroppedImage(undefined);
   };
 
  const handleSave = () => {

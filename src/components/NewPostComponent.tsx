@@ -1,7 +1,6 @@
-import React from 'react'
+
 import Camilo from "../assets/Camilo.jpeg";
 import { useCommentContext } from '../useContext/context';
-import { MdOutlinePublic } from 'react-icons/md';
 import { FaEllipsisV } from 'react-icons/fa';
 
 export default function NewPostComponent() {
@@ -11,7 +10,6 @@ export default function NewPostComponent() {
         validateImage,  
         audio,
         comment,
-        privacy,
         validatePrivate,
         
      } = useCommentContext(); 

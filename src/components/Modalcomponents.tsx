@@ -1,18 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import viteLogo from "/vite.svg";
 import { PiImageFill, PiPlayCircleFill } from "react-icons/pi";
 import { AiFillAudio } from "react-icons/ai";
 import ImageCropper from './ImageCropper.js';
-import ComponentInput from "./InputComponent.js";
+
 import { useCommentContext } from "../useContext/context.js";
-import { FaPlus } from "react-icons/fa";
-import { FiEdit } from "react-icons/fi";
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import { IoClose } from "react-icons/io5";
 import { FaFaceGrinHearts } from "react-icons/fa6";
-import { RiGitRepositoryPrivateFill } from "react-icons/ri";
-import { MdOutlinePublic } from "react-icons/md";
+import ComponentInput from "./inputComponent.js";
+import { FiEdit } from "react-icons/fi";
 
 function CommentWithMediaModal() {
   const {
@@ -39,6 +37,7 @@ function CommentWithMediaModal() {
   } = useCommentContext();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileUpload = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -57,6 +56,12 @@ function CommentWithMediaModal() {
       setIsEditing(false);
     }
   };
+
+     // Resetea el input de archivo después de procesar el archivo
+     if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  
 
   const addEmoji = (emoji: any) => {
     setComment((prev) => prev + emoji.native);
@@ -80,6 +85,8 @@ function CommentWithMediaModal() {
     setAudio(null);
     setPrivacy(privacy);
   };
+
+
 
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
@@ -138,15 +145,16 @@ function CommentWithMediaModal() {
                       <button
                         type="button"
                         className="btn backdrop-blur-sm bg-black/30 rounded-full"
+                        onClick={() =>   setImage(undefined)}
                       >
-                        <FaPlus />
+                        <IoClose  size={28}/>
                       </button>
                       <button
                         type="button"
                         className="btn backdrop-blur-sm bg-black/30 rounded-full flex justify-center gap-1 items-center"
                         onClick={handleEditClick}
                       >
-                        <FiEdit size={20} /> Edit
+                        < FiEdit size={20} /> Edit
                       </button>
                     </div>
                     <div className="rounded-3 overflow-hidden">
@@ -205,6 +213,7 @@ function CommentWithMediaModal() {
                       type="file"
                       accept="image/*"
                       onChange={(e) => handleFileUpload(e, "image")}
+                      ref={fileInputRef}
                       className="hidden"
                     />
                     <span className="absolute bg-hover-color rounded-full left-1/2 px-2 py-1 transform -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm text-center">
